@@ -8,9 +8,16 @@ Projeto Cadastro de Usuario API BFF
 - CRUD
 
 ## 💻 Projeto
+Fluxograma
 
+
+  ![image](https://github.com/user-attachments/assets/cb772cfe-ac60-4bb3-a287-53948e877618)
+
+<<<<<<< HEAD
 
   
+=======
+>>>>>>> c27e9262b8cde375017dd6d3660e613bb886424c
 ## 👨‍💻 Tecnologias Utilizadas
 
 > - Java 17
