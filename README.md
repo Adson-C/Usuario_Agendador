@@ -8,9 +8,11 @@ Projeto Cadastro de Usuario API BFF
 - CRUD
 
 ## 💻 Projeto
+Fluxograma
 
-    <img src="useradson\src\main\resources\assets\image.png" alt="Fluxograma" />
-  
+
+  ![image](https://github.com/user-attachments/assets/cb772cfe-ac60-4bb3-a287-53948e877618)
+
 ## 👨‍💻 Tecnologias Utilizadas
 
 > - Java 17
