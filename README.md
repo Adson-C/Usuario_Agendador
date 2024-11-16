@@ -9,7 +9,6 @@ Projeto Cadastro de Usuario API BFF
 
 ## 💻 Projeto
 
-    <img src="useradson\src\main\resources\assets\image.png" alt="Fluxograma" />
   
 ## 👨‍💻 Tecnologias Utilizadas
 
