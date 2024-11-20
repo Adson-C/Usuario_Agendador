@@ -2,12 +2,14 @@ package com.adsonsa.useradson.controller;
 
 import com.adsonsa.useradson.business.UsuarioService;
 import com.adsonsa.useradson.business.dto.UsuarioDTO;
+import com.adsonsa.useradson.infrastructure.entity.Usuario;
+import com.adsonsa.useradson.infrastructure.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/usuario")
@@ -15,10 +17,35 @@ import org.springframework.web.bind.annotation.RestController;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwt;
+
     // metodo para cadastrar um novo usuario
     @PostMapping
     public ResponseEntity<UsuarioDTO> salvaUsuario(@RequestBody UsuarioDTO usuarioDTO) {
         return ResponseEntity.ok(usuarioService.salvaUsuario(usuarioDTO));
     }
 
+
+    // metodo para fazer login
+    @PostMapping("/login")
+    public String login(@RequestBody UsuarioDTO usuarioDTO){
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(usuarioDTO.getEmail(),
+                        usuarioDTO.getSenha())
+        );
+        return "Bearer " + jwt.generateToken(authentication.getName());
+    }
+
+    // metodo para buscar usuario pelo email
+    @GetMapping
+    public ResponseEntity<Usuario> buscarPorEmail(@RequestParam("email") String email){
+        return ResponseEntity.ok(usuarioService.buscarUsuarioPorEmail(email));
+    }
+    // deletar usuario pelo email
+    @DeleteMapping("/{email}")
+    public ResponseEntity<Void> deletarPorEmail(@PathVariable String email){
+        usuarioService.deletarUsuarioPorEmail(email);
+        return ResponseEntity.ok().build();
+    }
 }
