@@ -83,4 +83,15 @@ public class UsuarioConverter {
                 .cep(enderecosDTO.getCep())
                 .build();
     }
+
+    public Usuario updateUsuario(UsuarioDTO dto, Usuario entity){
+        return Usuario.builder()
+                .nome(dto.getNome() != null ? dto.getNome() : entity.getNome())
+                .id(entity.getId())
+                .email(dto.getEmail() != null ? dto.getEmail() : entity.getEmail())
+                .senha(dto.getSenha() != null ?  dto.getSenha() : entity.getSenha())
+                .enderecos(entity.getEnderecos())
+                .telefones(entity.getTelefones())
+                .build();
+    }
 }

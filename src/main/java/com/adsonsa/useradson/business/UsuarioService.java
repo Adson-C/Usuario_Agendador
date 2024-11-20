@@ -6,6 +6,7 @@ import com.adsonsa.useradson.infrastructure.entity.Usuario;
 import com.adsonsa.useradson.infrastructure.exceptions.ConflictException;
 import com.adsonsa.useradson.infrastructure.exceptions.ResourceNotFoundException;
 import com.adsonsa.useradson.infrastructure.repository.UsuarioRepository;
+import com.adsonsa.useradson.infrastructure.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,8 +17,8 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final UsuarioConverter usuarioConverter;
-
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil  jwtUtil;
 
     public UsuarioDTO salvaUsuario(UsuarioDTO usuarioDTO) {
         emailExiste(usuarioDTO.getEmail());
@@ -51,5 +52,16 @@ public class UsuarioService {
     public void deletarUsuarioPorEmail(String email) {
         usuarioRepository.deleteByEmail(email);
     }
+    public UsuarioDTO atualizaDadosUsuario(String token ,UsuarioDTO dto){
+        // Extrair email do token
+        String email = jwtUtil.extrairEmailToken(token.substring(7));
+        // metodo para criptar senha
+        dto.setSenha(dto.getSenha() != null ? passwordEncoder.encode(dto.getSenha()) : null);
 
+        Usuario usuarioEntity = usuarioRepository.findByEmail(email).orElseThrow(() ->
+                new ResourceNotFoundException("Email nao encontrado" + email));
+        Usuario usuario = usuarioConverter.updateUsuario(dto, usuarioEntity);
+
+        return usuarioConverter.parausuarioDTO(usuarioRepository.save(usuario));
+    }
 }
